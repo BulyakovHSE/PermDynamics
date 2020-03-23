@@ -3,17 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:PermDynamics.View"
         xmlns:charting="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+        xmlns:viewModels="clr-namespace:PermDynamics.View.ViewModels;assembly=PermDynamics.View"
         mc:Ignorable="d"
-        Title="Perm Dynamics" Height="450" Width="800">
+        Title="Perm Dynamics" Height="500" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="Настройки">
@@ -25,13 +25,13 @@
         <WindowsFormsHost Grid.Row="1">
             <charting:Chart x:Name="chart"/>
         </WindowsFormsHost>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="40" VerticalAlignment="Top">
-            <Button Content="Купить" HorizontalAlignment="Center" Margin="10"/>
-            <Button Content="Продать" HorizontalAlignment="Center" Margin="10"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="25" VerticalAlignment="Top">
+            <Button Content="Купить" HorizontalAlignment="Center" Margin="0 5 5 0"/>
+            <Button Content="Продать" HorizontalAlignment="Center" Margin="5 5 0 0"/>
         </StackPanel>
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -40,6 +40,76 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="Мои активы" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBlock Text="Активы виртуального брокера" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Grid x:Name="AssetsGrid" Grid.Row="1" Grid.Column="0" d:DataContext="{d:DesignInstance viewModels:AssetsListViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="33"/>
+                    <RowDefinition Height="33"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="0 0 5 0">
+                    <TextBlock Text="Общая стоимость" HorizontalAlignment="Right"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding TotalValue, Mode=OneWay}"/>
+                        <Run Text="₽"/>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="0 0 5 0">
+                    <TextBlock Text="Изменение в %" HorizontalAlignment="Right"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding RelativeChange, Mode=OneWay}"/>
+                        <Run Text="%"/>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="0 0 5 0">
+                    <TextBlock Text="Изменение в ₽" HorizontalAlignment="Right"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding AbsoluteChange, Mode=OneWay}"/>
+                        <Run Text="₽"/>
+                    </TextBlock>
+                </StackPanel>
+                <ItemsControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Assets}" 
+                              ItemTemplateSelector="{StaticResource AssetsTemplateSelector}">
+                </ItemsControl>
+            </Grid>
+            <Grid x:Name="VirtualAssetsGrid" Grid.Row="1" Grid.Column="1" d:DataContext="{d:DesignInstance viewModels:AssetsListViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="33"/>
+                    <RowDefinition Height="33"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="0 0 5 0">
+                    <TextBlock Text="Общая стоимость" HorizontalAlignment="Right"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding TotalValue, Mode=OneWay}"/>
+                        <Run Text="₽"/>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="0 0 5 0">
+                    <TextBlock Text="Изменение в %" HorizontalAlignment="Right"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding RelativeChange, Mode=OneWay}"/>
+                        <Run Text="%"/>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="0 0 5 0">
+                    <TextBlock Text="Изменение в ₽" HorizontalAlignment="Right"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding AbsoluteChange, Mode=OneWay}"/>
+                        <Run Text="₽"/>
+                    </TextBlock>
+                </StackPanel>
+                <ItemsControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Assets}" 
+                              ItemTemplateSelector="{StaticResource AssetsTemplateSelector}">
+                </ItemsControl>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PermDynamics.View.Model;
+using PermDynamics.View.ViewModels;
 
 namespace PermDynamics.View
 {
@@ -25,6 +27,11 @@ namespace PermDynamics.View
         {
             InitializeComponent();
             Loaded += Window_Loaded;
+            var assets = new List<AssetViewModel>();
+            assets.Add(new AssetViewModel(new Asset { Name = "Денежные средства", Cost = 5000.5m }));
+            assets.Add(new ShareAssetViewModel(new ShareAsset { Name = "Perm Dynamics", Count = 10, BuyCost = 49.5m, CurrentPrice = 55m }));
+
+            AssetsGrid.DataContext = new AssetsListViewModel(assets);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
