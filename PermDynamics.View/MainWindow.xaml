@@ -3,10 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:PermDynamics.View"
+        xmlns:charting="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Perm Dynamics" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="Настройки">
+                <MenuItem Header="Начать заново"></MenuItem>
+                <Separator/>
+                <MenuItem Header="Архив"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <WindowsFormsHost Grid.Row="1">
+            <charting:Chart x:Name="chart"/>
+        </WindowsFormsHost>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="40" VerticalAlignment="Top">
+            <Button Content="Купить" HorizontalAlignment="Center" Margin="10"/>
+            <Button Content="Продать" HorizontalAlignment="Center" Margin="10"/>
+        </StackPanel>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Мои активы" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="Активы виртуального брокера" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>
