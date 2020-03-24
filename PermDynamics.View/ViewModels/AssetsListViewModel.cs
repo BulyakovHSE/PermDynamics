@@ -12,7 +12,7 @@ namespace PermDynamics.View.ViewModels
     {
         private ObservableCollection<AssetViewModel> _assets;
 
-        public decimal TotalValue => Assets.Sum(x => x.Cost);
+        public decimal TotalValue => Assets.Sum(x => x.GetType() == typeof(AssetViewModel) ? x.Cost : ((ShareAssetViewModel)x).Cost);
 
         public decimal AbsoluteChange => Assets.Sum(x => x.GetType() == typeof(AssetViewModel) ? 0 : ((ShareAssetViewModel)x).AbsoluteChange);
 
@@ -21,7 +21,7 @@ namespace PermDynamics.View.ViewModels
             get
             {
                 var sum = Assets.Sum(x => x.GetType() == typeof(AssetViewModel) ? x.Cost : ((ShareAssetViewModel)x).BuyCost * ((ShareAssetViewModel)x).Count);
-                return sum == 0 ? 0 : Math.Round((double)(AbsoluteChange / sum), 2);
+                return sum == 0 ? 0 : Math.Round((double)(AbsoluteChange / sum) * 100, 2);
             }
         }
 
@@ -31,8 +31,16 @@ namespace PermDynamics.View.ViewModels
             set
             {
                 _assets = value;
-                OnPropertyChanged();
+                AssetsChanged();
             }
+        }
+
+        public void AssetsChanged()
+        {
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TotalValue));
+            OnPropertyChanged(nameof(AbsoluteChange));
+            OnPropertyChanged(nameof(RelativeChange));
         }
 
         public AssetsListViewModel(IList<AssetViewModel> assets)

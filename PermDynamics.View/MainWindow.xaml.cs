@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,15 +24,14 @@ namespace PermDynamics.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel _viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+            _viewModel = new MainWindowViewModel();
+            DataContext = _viewModel;
             Loaded += Window_Loaded;
-            var assets = new List<AssetViewModel>();
-            assets.Add(new AssetViewModel(new Asset { Name = "Денежные средства", Cost = 5000.5m }));
-            assets.Add(new ShareAssetViewModel(new ShareAsset { Name = "Perm Dynamics", Count = 10, BuyCost = 49.5m, CurrentPrice = 55m }));
-
-            AssetsGrid.DataContext = new AssetsListViewModel(assets);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -40,14 +40,48 @@ namespace PermDynamics.View
             chart.ChartAreas.Add(new ChartArea("Default"));
 
             // Добавим линию, и назначим ее в ранее созданную область "Default"
-            chart.Series.Add(new Series("Series1"));
-            chart.Series["Series1"].ChartArea = "Default";
-            chart.Series["Series1"].ChartType = SeriesChartType.Line;
+            chart.Series.Add(new Series("Perm Dynamics"));
+            chart.Series["Perm Dynamics"].ChartArea = "Default";
+            chart.Series["Perm Dynamics"].ChartType = SeriesChartType.Line;
 
-            // добавим данные линии
-            string[] axisXData = new string[] { "a", "b", "c" };
-            double[] axisYData = new double[] { 0.1, 1.5, 1.9 };
-            chart.Series["Series1"].Points.DataBindXY(axisXData, axisYData);
+            //// добавим данные линии
+            //string[] axisXData = new string[] { "a", "b", "c" };
+            //double[] axisYData = new double[] { 0.1, 1.5, 1.9 };
+            //chart.Series["Perm Dynamics"].Points.DataBindXY(axisXData, axisYData);
+            var r = new Random();
+            decimal last = 10;
+            var c = SynchronizationContext.Current;
+            for (int i = 0; i < 299; i++)
+            {
+                chart.Series["Perm Dynamics"].Points.AddXY(DateTime.Now.ToLongTimeString(), last);
+                last += (decimal)r.NextDouble() - 0.45m;
+            }
+            var task = Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    decimal delta = 0;
+                    do
+                    {
+                        delta = (decimal) r.NextDouble() - 0.5m;
+                    } while (last < 0.1m && delta < 0);
+
+                    last += delta;
+
+                    c.Send(state =>
+                    {
+                        chart.Series["Perm Dynamics"].Points.AddXY(DateTime.Now.ToLongTimeString(), last);
+                        if (chart.Series["Perm Dynamics"].Points.Count == 300)
+                            chart.Series["Perm Dynamics"].Points.RemoveAt(0);
+                    }, null);
+                    
+
+                    _viewModel.CurrentPrice = last;
+
+                    Thread.Sleep(1000);
+                }
+            });
+            
         }
     }
 }

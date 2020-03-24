@@ -4,8 +4,11 @@
              xmlns:local="clr-namespace:PermDynamics.View"
              xmlns:templateSelectors="clr-namespace:PermDynamics.View.TemplateSelectors"
              xmlns:viewModels="clr-namespace:PermDynamics.View.ViewModels"
+             xmlns:converters="clr-namespace:WPFMVVMLib.Converters;assembly=WPFMVVMLib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <converters:NumberToColorConverter x:Key="NumberToColorConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <DataTemplate x:Key="AssetTemplate" DataType="viewModels:AssetViewModel">
             <Border BorderBrush="Gray" BorderThickness="1">
                 <Grid Height="20">
@@ -40,11 +43,13 @@
                     <Run Text="{Binding Cost, Mode=OneWay}"/>
                     <Run Text="₽"/>
                     </TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="5 0 0 0">
+                    <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="5 0 0 0"
+                               Foreground="{Binding RelativeChange, Converter={StaticResource NumberToColorConverter}}">
                     <Run Text="{Binding RelativeChange, Mode=OneWay}"/>
                     <Run Text="%"/>
                     </TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="0 0 5 0">
+                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="0 0 5 0" 
+                               Foreground="{Binding AbsoluteChange, Converter={StaticResource NumberToColorConverter}}">
                     <Run Text="{Binding AbsoluteChange, Mode=OneWay}"/>
                     <Run Text="₽"/>
                     </TextBlock>

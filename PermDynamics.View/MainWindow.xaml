@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PermDynamics.View"
         xmlns:charting="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
-        xmlns:viewModels="clr-namespace:PermDynamics.View.ViewModels;assembly=PermDynamics.View"
+        xmlns:viewModels="clr-namespace:PermDynamics.View.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         Title="Perm Dynamics" Height="500" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -25,10 +26,23 @@
         <WindowsFormsHost Grid.Row="1">
             <charting:Chart x:Name="chart"/>
         </WindowsFormsHost>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="25" VerticalAlignment="Top">
-            <Button Content="Купить" HorizontalAlignment="Center" Margin="0 5 5 0"/>
-            <Button Content="Продать" HorizontalAlignment="Center" Margin="5 5 0 0"/>
-        </StackPanel>
+        <Grid Grid.Row="2" Height="25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="5 0 0 0">
+                <Run Text="Текущая цена: "/>
+                <Run Text="{Binding CurrentPrice}"/>
+                <Run Text="₽"/>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" Height="25" VerticalAlignment="Center">
+                <Button Content="Купить" HorizontalAlignment="Center" Margin="0 5 5 0" Command="{Binding BuyShareCommand}"/>
+                <Button Content="Продать" HorizontalAlignment="Center" Margin="5 5 0 0" Command="{Binding SellShareCommand}"/>
+            </StackPanel>
+        </Grid>
+        
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
@@ -40,7 +54,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="Мои активы" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBlock Text="Активы виртуального брокера" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Grid x:Name="AssetsGrid" Grid.Row="1" Grid.Column="0" d:DataContext="{d:DesignInstance viewModels:AssetsListViewModel}">
+            <Grid x:Name="AssetsGrid" Grid.Row="1" Grid.Column="0" DataContext="{Binding UserAssetsList}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="33"/>
                     <RowDefinition Height="33"/>
@@ -59,14 +73,14 @@
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="0 0 5 0">
                     <TextBlock Text="Изменение в %" HorizontalAlignment="Right"/>
-                    <TextBlock HorizontalAlignment="Right">
+                    <TextBlock HorizontalAlignment="Right" Foreground="{Binding RelativeChange, Converter={StaticResource NumberToColorConverter}}">
                         <Run Text="{Binding RelativeChange, Mode=OneWay}"/>
                         <Run Text="%"/>
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="0 0 5 0">
                     <TextBlock Text="Изменение в ₽" HorizontalAlignment="Right"/>
-                    <TextBlock HorizontalAlignment="Right">
+                    <TextBlock HorizontalAlignment="Right" Foreground="{Binding AbsoluteChange, Converter={StaticResource NumberToColorConverter}}">
                         <Run Text="{Binding AbsoluteChange, Mode=OneWay}"/>
                         <Run Text="₽"/>
                     </TextBlock>
@@ -75,7 +89,7 @@
                               ItemTemplateSelector="{StaticResource AssetsTemplateSelector}">
                 </ItemsControl>
             </Grid>
-            <Grid x:Name="VirtualAssetsGrid" Grid.Row="1" Grid.Column="1" d:DataContext="{d:DesignInstance viewModels:AssetsListViewModel}">
+            <Grid x:Name="VirtualAssetsGrid" Grid.Row="1" Grid.Column="1" DataContext="{Binding VirtualBrokerAssetsList}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="33"/>
                     <RowDefinition Height="33"/>

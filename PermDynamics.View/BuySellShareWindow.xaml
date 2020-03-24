@@ -1,0 +1,32 @@
+﻿<Window x:Class="PermDynamics.View.BuySellShareWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PermDynamics.View"
+        xmlns:viewModels="clr-namespace:PermDynamics.View.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:BuySellShareViewModel}"
+        Title="BuySellShareWindow" Height="250" Width="200">
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="15">
+            <TextBlock Text="Сумма инвестирования"/>
+            <TextBox Text="{Binding Sum, Mode=OneWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" IsReadOnly="True" Margin="0 0 0 0"/>
+            <TextBlock Margin="0 0 0 5" Visibility="{Binding IsBuyAction, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Run Text="Доступно"/>
+                <Run Text="{Binding AvailableSum}"/>
+                <Run Text="₽"/>
+            </TextBlock>
+            <TextBlock Text="Цена"/>
+            <TextBox Text="{Binding CurrentPrice, Mode=OneWay}" IsReadOnly="True" Margin="0 0 0 5"/>
+            <TextBlock Text="Количество акций"/>
+            <TextBox x:Name="txt_count" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+            <TextBlock Visibility="{Binding IsSellAction, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Run Text="Доступно"/>
+                <Run Text="{Binding AvailableCount}"/>
+                <Run Text="шт"/>
+            </TextBlock>
+            <Button Content="{Binding OkBtnText}" Click="ButtonBase_OnClick" Margin="5" IsEnabled="{Binding IsOk}" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

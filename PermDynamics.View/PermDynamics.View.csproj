@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
@@ -60,11 +61,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BuySellShareWindow.xaml.cs">
+      <DependentUpon>BuySellShareWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\ShareAsset.cs" />
     <Compile Include="TemplateSelectors\AssetsTemplateSelector.cs" />
     <Compile Include="ViewModels\AssetsListViewModel.cs" />
     <Compile Include="ViewModels\AssetViewModel.cs" />
+    <Compile Include="ViewModels\BuySellShareViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Page Include="BuySellShareWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
