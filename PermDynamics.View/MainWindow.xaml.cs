@@ -46,11 +46,8 @@ namespace PermDynamics.View
             chart.Series.Add(new Series("Perm Dynamics"));
             chart.Series["Perm Dynamics"].ChartArea = "Default";
             chart.Series["Perm Dynamics"].ChartType = SeriesChartType.Line;
+            chart.Series["Perm Dynamics"].AxisLabel = "Perm Dynamics";
 
-            //// добавим данные линии
-            //string[] axisXData = new string[] { "a", "b", "c" };
-            //double[] axisYData = new double[] { 0.1, 1.5, 1.9 };
-            //chart.Series["Perm Dynamics"].Points.DataBindXY(axisXData, axisYData);
             var r = new Random();
             decimal last = 10;
             var c = SynchronizationContext.Current;
@@ -77,6 +74,7 @@ namespace PermDynamics.View
                         chart.Series["Perm Dynamics"].Points.AddXY(DateTime.Now.ToLongTimeString(), last);
                         if (chart.Series["Perm Dynamics"].Points.Count == 200)
                             chart.Series["Perm Dynamics"].Points.RemoveAt(0);
+                        chart.ResetAutoValues();
                     }, null);
 
 

@@ -122,13 +122,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OneDrive\Documents\Projects\WPF\WPFMVVMLib\WPFMVVMLib.csproj">
-      <Project>{54f0ef54-2e10-42c8-b213-1e664c8ab997}</Project>
-      <Name>WPFMVVMLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PermDynamics.Model\PermDynamics.Model.csproj">
       <Project>{7dc6066e-4268-4b8a-8548-00c05a45d94f}</Project>
       <Name>PermDynamics.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WPFMVVMLib\WPFMVVMLib.csproj">
+      <Project>{54f0ef54-2e10-42c8-b213-1e664c8ab997}</Project>
+      <Name>WPFMVVMLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
