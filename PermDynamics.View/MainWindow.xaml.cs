@@ -80,7 +80,7 @@ namespace PermDynamics.View
 
                     _viewModel.CurrentPrice = last;
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
                 }
             });
         }
