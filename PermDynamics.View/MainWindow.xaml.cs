@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PermDynamics.Model;
 using PermDynamics.View.Model;
 using PermDynamics.View.ViewModels;
 
@@ -29,6 +31,7 @@ namespace PermDynamics.View
         public MainWindow()
         {
             InitializeComponent();
+            InitDb();
             _viewModel = new MainWindowViewModel();
             DataContext = _viewModel;
             Loaded += Window_Loaded;
@@ -51,9 +54,10 @@ namespace PermDynamics.View
             var r = new Random();
             decimal last = 10;
             var c = SynchronizationContext.Current;
-            for (int i = 0; i < 299; i++)
+            var datetime = DateTime.Now.AddSeconds(-200);
+            for (int i = 0; i < 199; i++)
             {
-                chart.Series["Perm Dynamics"].Points.AddXY(DateTime.Now.ToLongTimeString(), last);
+                chart.Series["Perm Dynamics"].Points.AddXY(datetime.AddSeconds(i).ToLongTimeString(), last);
                 last += (decimal)r.NextDouble() - 0.45m;
             }
             var task = Task.Factory.StartNew(() =>
@@ -63,7 +67,7 @@ namespace PermDynamics.View
                     decimal delta = 0;
                     do
                     {
-                        delta = (decimal) r.NextDouble() - 0.5m;
+                        delta = (decimal)r.NextDouble() - 0.47m;
                     } while (last < 0.1m && delta < 0);
 
                     last += delta;
@@ -71,17 +75,50 @@ namespace PermDynamics.View
                     c.Send(state =>
                     {
                         chart.Series["Perm Dynamics"].Points.AddXY(DateTime.Now.ToLongTimeString(), last);
-                        if (chart.Series["Perm Dynamics"].Points.Count == 300)
+                        if (chart.Series["Perm Dynamics"].Points.Count == 200)
                             chart.Series["Perm Dynamics"].Points.RemoveAt(0);
                     }, null);
-                    
+
 
                     _viewModel.CurrentPrice = last;
 
                     Thread.Sleep(1000);
                 }
             });
-            
+        }
+
+        private void InitDb()
+        {
+            //SharesModel.DeleteTables();
+            SharesModel.CreateTables();
+            var users = SharesModel.GetUsers();
+            if (users.Count == 0)
+            {
+                var user = new User() { Id = 0, Name = "Пользователь", Money = 400000, ShareCount = 0 };
+                var virtualUser = new User() { Id = 1, Name = "Виртуальный брокер", Money = 400000, ShareCount = 0 };
+                SharesModel.AddUser(user);
+                SharesModel.AddUser(virtualUser);
+            }
+
+            if (users.Count == 1)
+            {
+                var user = new User() { Id = 0, Name = "Пользователь", Money = 400000, ShareCount = 0 };
+                var virtualUser = new User() { Id = 1, Name = "Виртуальный брокер", Money = 400000, ShareCount = 0 };
+
+                if (users.First().Name == "Пользователь")
+                {
+                    SharesModel.AddUser(virtualUser);
+                }
+                else if (users.First().Name == "Виртуальный брокер")
+                {
+                    SharesModel.AddUser(user);
+                }
+                else
+                {
+                    SharesModel.AddUser(user);
+                    SharesModel.AddUser(virtualUser);
+                }
+            }
         }
     }
 }

@@ -61,6 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ArchiveWindow.xaml.cs">
+      <DependentUpon>ArchiveWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BuySellShareWindow.xaml.cs">
       <DependentUpon>BuySellShareWindow.xaml</DependentUpon>
     </Compile>
@@ -71,6 +74,10 @@
     <Compile Include="ViewModels\AssetViewModel.cs" />
     <Compile Include="ViewModels\BuySellShareViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Page Include="ArchiveWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="BuySellShareWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

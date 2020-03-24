@@ -18,9 +18,9 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="Настройки">
-                <MenuItem Header="Начать заново"></MenuItem>
+                <MenuItem Header="Начать заново" Command="{Binding RestartCommand}"></MenuItem>
                 <Separator/>
-                <MenuItem Header="Архив"></MenuItem>
+                <MenuItem Header="Архив" Command="{Binding ArchiveCommand}"></MenuItem>
             </MenuItem>
         </Menu>
         <WindowsFormsHost Grid.Row="1">
